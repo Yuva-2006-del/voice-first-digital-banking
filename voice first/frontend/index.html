@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Fintech Dashboard</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-gray: #94a3b8;
+            --accent-gold: #fbbf24;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Header & Voice Section --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { margin-bottom: 10px; font-weight: 300; letter-spacing: 1px; }
+
+        .mic-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary);
+        }
+
+        .mic-container:hover { transform: scale(1.05); background-color: var(--primary); }
+        .mic-container.listening { animation: pulse 1.5s infinite; background-color: var(--primary); }
+        
+        .mic-icon { font-size: 32px; }
+
+        .status-text {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            min-height: 24px;
+        }
+
+        .interaction-log {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* --- Dashboard Grid --- */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-3px); }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-value { font-size: 1.8rem; font-weight: bold; margin-bottom: 5px; }
+        .card-sub { font-size: 0.9rem; color: var(--text-gray); }
+
+        /* Specific Card Styles based on Services */
+        .val-gold { color: var(--accent-gold); }
+        .val-green { color: var(--accent-green); }
+        .val-red { color: var(--accent-red); }
+
+        /* --- Animations --- */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>VOICE FINTECH</h1>
+        <p class="status-text" id="status">Tap the microphone to speak...</p>
+        
+        <div class="mic-container" id="micBtn">
+            <div class="mic-icon">🎙️</div>
+        </div>
+
+        <div class="interaction-log" id="logArea">
+            "Hello! I am your voice assistant. Try asking: 'Check my gold balance' or 'Show my loan history'."
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-header">Total Balance</div>
+            <div class="card-value val-green">$12,450.00</div>
+            <div class="card-sub">Checking Account</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Savings Goal</div>
+            <div class="card-value">$5,000.00</div>
+            <div class="card-sub">Progress: 65%</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Active Loans</div>
+            <div class="card-value val-red">$2,200.00</div>
+            <div class="card-sub">Next payment due: Jan 25</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Gold Holdings</div>
+            <div class="card-value val-gold">24.5g</div>
+            <div class="card-sub">Value: ~$1,850.00</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Total Donations</div>
+            <div class="card-value">$150.00</div>
+            <div class="card-sub">Last: Red Cross</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Recent Activity</div>
+            <div class="card-sub" style="margin-top: 10px;">
+                • Starbucks coffee -$4.50<br>
+                • Salary Deposit +$3,000<br>
+                • Gold Purchase -$200
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. SETUP VOICE RECOGNITION ---
+        const micBtn = document.getElementById('micBtn');
+        const statusText = document.getElementById('status');
+        const logArea = document.getElementById('logArea');
+        
+        // Check browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                micBtn.classList.add('listening');
+                statusText.innerText = "Listening...";
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+                statusText.innerText = "Processing...";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                statusText.innerText = "Tap mic to speak";
+                logArea.innerHTML = `<strong>You said:</strong> "${transcript}"`;
+                
+                // SEND TO BACKEND
+                sendVoiceCommand(transcript);
+            };
+        } else {
+            logArea.innerText = "Browser does not support Voice API. Please use Chrome.";
+        }
+
+        micBtn.addEventListener('click', () => {
+            if (SpeechRecognition) recognition.start();
+        });
+
+        // --- 2. BACKEND COMMUNICATION ---
+        
+        async function sendVoiceCommand(text) {
+            
+            // TODO: UPDATE THIS URL TO MATCH YOUR SPRING BOOT CONTROLLER
+            // Example: If your VoiceIntentService is exposed at http://localhost:8080/api/voice
+            const API_URL = 'http://localhost:8080/api/voice'; 
+
+            try {
+                // Simulating a network call for demonstration
+                console.log("Sending to backend:", text);
+                
+                /* UNCOMMENT THIS BLOCK WHEN YOUR BACKEND IS RUNNING
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: text })
+                });
+                const data = await response.json();
+                handleBackendResponse(data);
+                */
+
+                // MOCK RESPONSE (Remove this when backend is connected)
+                setTimeout(() => {
+                    handleBackendResponse({ 
+                        message: "I processed your command: " + text, 
+                        action: "UPDATE_DASHBOARD" 
+                    });
+                }, 1000);
+
+            } catch (error) {
+                console.error("Error connecting to backend:", error);
+                logArea.innerHTML += `<br><span style="color:red">Backend Error: Check console</span>`;
+            }
+        }
+
+        function handleBackendResponse(data) {
+            // Update the UI based on what the Java backend returns
+            logArea.innerHTML += `<br><strong>Assistant:</strong> "${data.message}"`;
+            
+            // Logic to update cards dynamically could go here
+            // e.g. document.querySelector('.val-gold').innerText = data.newGoldBalance;
+        }
+
+        // --- 3. INITIAL DATA LOAD ---
+        window.onload = () => {
+            // Fetch initial data from HistoryService, GoldService, etc.
+            console.log("Page loaded. Fetching initial dashboard data...");
+        };
+
+    </script>
+</body>
+</html>

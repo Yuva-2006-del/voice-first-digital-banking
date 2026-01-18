@@ -1,0 +1,43 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+/* ROOT COLORS */
+:root {
+  --primary: #6a1b9a;
+  --secondary: #512da8;
+  --bg: #f4f2ff;
+  --card: #ffffff;
+  --text-dark: #222;
+  --text-light: #666;
+}
+
+/* BODY */
+body {
+  background: var(--bg);
+  color: var(--text-dark);
+  padding-bottom: 90px; /* space for bottom nav */
+}
+
+/* HEADINGS */
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+/* BUTTON */
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
